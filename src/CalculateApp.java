@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -23,24 +24,36 @@ public class CalculateApp extends Application {
 
         // Создаем кнопку "Рассчитать" и другие элементы управления
         Button calculate = new Button("Розрахувати");
-        Label label = new Label("Уведіть кінцевий час розрахунку:");
-        TextField inputField = new TextField();
-        Text resultOfCalculation = new Text();
+
+        Label endTimeLabel = new Label("Уведіть кінцевий час розрахунку у форматі \"дд-мм-рр гг:хх\":");
+        Label currentLevelLabel = new Label("Уведіть залишок на АЗС " + GasStations.Krainia.name + " у %:");
+
+        TextField inputFieldEndTime = new TextField();
+        TextField inputFieldCurrentLevel = new TextField();
+
+        TextArea resultOfCalculation = new TextArea();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm");
 
-        VBox.setMargin(label, new Insets(10, 0, 0, 0));
-        VBox.setMargin(inputField, new Insets(0, 0, 10, 0));
+        VBox.setMargin(endTimeLabel, new Insets(10, 5, 0, 5));
+        VBox.setMargin(inputFieldEndTime, new Insets(0, 5, 10, 5));
+        VBox.setMargin(currentLevelLabel, new Insets(0, 5, 0, 5));
+        VBox.setMargin(inputFieldCurrentLevel, new Insets(0, 5, 10, 5));
+        VBox.setMargin(calculate, new Insets(0, 0, 0, 5));
+        VBox.setMargin(resultOfCalculation, new Insets(10, 5, 0, 5));
 
-        VBox root = new VBox(10); // 10 - это расстояние между элементами
-        root.getChildren().addAll(label, inputField, calculate, resultOfCalculation);
+        VBox root = new VBox(5); // 10 - это расстояние между элементами
+        root.getChildren().addAll(endTimeLabel, inputFieldEndTime, currentLevelLabel, inputFieldCurrentLevel,
+                calculate, resultOfCalculation);
 
         calculate.setOnAction(event -> {
             String inputStartDateTime = LocalDateTime.now().format(formatter);
-            String inputEndDateTime = inputField.getText();
+            String inputEndDateTime = inputFieldEndTime.getText();
+            GasStations.Krainia.currentLevel = Integer.parseInt(inputFieldCurrentLevel.getText());
 
             // Вызываем метод perMinute из класса Calculate и передаем нужные значения
-            Calculate.perMinute(inputStartDateTime, inputEndDateTime, formatter);
+            String result = Calculate.perMinute(inputStartDateTime, inputEndDateTime, formatter);
+            resultOfCalculation.setText(result);
         });
 
         // Создаем сцену с макетом и устанавливаем ее для primaryStage
