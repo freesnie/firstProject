@@ -14,12 +14,12 @@ public class Calculate {
             startDateTime = LocalDateTime.parse(inputStartDateTime, formatter); //переводим текстовую строку в
             endDateTime = LocalDateTime.parse(inputEndDateTime, formatter); //обьект LocalDateTime согласно форматтеру
 
-            if (startDateTime.isAfter(endDateTime)) {
+/*            if (startDateTime.isAfter(endDateTime)) {
                 System.out.println("Помилка! Кінцевий час має йти після початкового, а не перед.");
             } else if (startDateTime.equals(endDateTime)) {
                 System.out.println("Помилка! Кінцевий час не може бути однаковим з початковим.");
             }
-        } while (startDateTime.isAfter(endDateTime) || startDateTime.equals(endDateTime));
+*/        } while (startDateTime.isAfter(endDateTime) || startDateTime.equals(endDateTime));
 
         while (!startDateTime.isEqual(endDateTime) && GasStations.Krainia.currentLevel >= 0) {
 
