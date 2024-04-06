@@ -24,22 +24,22 @@ public class CalculateApp extends Application {
 
         Label curLevLabel = new Label("Уведіть залишок у %:");
         Label tankVolLabel = new Label("Газу у цистерні, л:");
-        Label curLevLabelKrainia = new Label("Крайня:");
-        Label curLevLabelShukhevycha = new Label("Шухевича:");
-        Label curLevLabelAzerbaidzhanska = new Label("Азербайджанська:");
 
-        TextField curLevKrainia = new TextField();
-        curLevKrainia.setMaxWidth(30);
-        //curLevKrainia.setText("");
+        Label label1 = new Label();
+        Label label2 = new Label();
+        Label label3 = new Label();
+        Label[] levelLabels = {label1, label2, label3};
 
-        TextField curLevShukhevycha = new TextField();
-        curLevShukhevycha.setMaxWidth(30);
-        //curLevShukhevycha.setText("");
+        TextField textField1 = new TextField();
+        textField1.setMaxWidth(30);
 
-        TextField curLevAzerbaidzhanska = new TextField();
-        curLevAzerbaidzhanska.setMaxWidth(30);
-        //curLevAzerbaidzhanska.setText("");
-        //String[] curLevFields = {String.valueOf(curLevKrainia), String.valueOf(curLevShukhevycha), String.valueOf(curLevAzerbaidzhanska)};
+        TextField textField2 = new TextField();
+        textField2.setMaxWidth(30);
+
+        TextField textField3 = new TextField();
+        textField3.setMaxWidth(30);
+
+        TextField[] levelFields = {textField1, textField2, textField3};
 
         TextField tankVolTextField = new TextField();
         tankVolTextField.setMaxWidth(50);
@@ -49,14 +49,14 @@ public class CalculateApp extends Application {
 
         VBox.setMargin(curLevLabel, new Insets(5, 5, 0, 5));
 
-        HBox.setMargin(curLevLabelKrainia, new Insets(5, 2, 0, 5));
-        HBox.setMargin(curLevKrainia, new Insets(0, 5, 0, 0));
+        HBox.setMargin(label1, new Insets(5, 2, 0, 5));
+        HBox.setMargin(textField1, new Insets(0, 5, 0, 0));
 
-        HBox.setMargin(curLevLabelShukhevycha, new Insets(5, 2, 0, 10));
-        HBox.setMargin(curLevShukhevycha, new Insets(0, 5, 0, 0));
+        HBox.setMargin(label2, new Insets(5, 2, 0, 10));
+        HBox.setMargin(textField2, new Insets(0, 5, 0, 0));
 
-        HBox.setMargin(curLevLabelAzerbaidzhanska, new Insets(5, 2, 0, 10));
-        HBox.setMargin(curLevAzerbaidzhanska, new Insets(0, 5, 0, 0));
+        HBox.setMargin(label3, new Insets(5, 2, 0, 10));
+        HBox.setMargin(textField3, new Insets(0, 5, 0, 0));
 
         HBox.setMargin(tankVolLabel, new Insets(5, 2, 0, 5));
         HBox.setMargin(tankVolTextField, new Insets(0, 5, 0, 0));
@@ -65,8 +65,8 @@ public class CalculateApp extends Application {
         VBox.setMargin(resultOfCalculation, new Insets(0, 5, 0, 5));
 
         HBox stationArea = new HBox(0);
-        stationArea.getChildren().addAll(curLevLabelKrainia, curLevKrainia, curLevLabelShukhevycha, curLevShukhevycha,
-                curLevLabelAzerbaidzhanska, curLevAzerbaidzhanska);
+        stationArea.getChildren().addAll(label1, textField1, label2, textField2,
+                label3, textField3);
 
         HBox tankVolArea = new HBox(0);
         tankVolArea.getChildren().addAll(tankVolLabel, tankVolTextField);
@@ -74,38 +74,31 @@ public class CalculateApp extends Application {
         VBox vBox = new VBox(10); // 5 - это расстояние между элементами
         vBox.getChildren().addAll(curLevLabel, stationArea, tankVolArea, calculate, resultOfCalculation);
 
-        calculate.setOnAction(event -> {
-
-            resultOfCalculation.clear();
-/*
-            for (int i = 0; i < GasStations.leftCoast.length; i++) {
-                GasStations.leftCoast[i].currentLevel = CalculateApp.getCurLevValue(GasStations.leftCoast[i].name);
-            }
-*/
-            GasStations.Krainia.currentLevel = Integer.parseInt(curLevKrainia.getText())*100;
-            GasStations.Shukhevycha.currentLevel = Integer.parseInt(curLevShukhevycha.getText())*100;
-            GasStations.Azerbaidzhanska.currentLevel = Integer.parseInt(curLevAzerbaidzhanska.getText())*100;
-
-            double tankVol = Double.parseDouble(tankVolTextField.getText());
-
-            // Вызываем метод perMinute из класса Calculate и передаем нужные значения
-            Calculate.perMinute(resultOfCalculation, tankVol);
-        });
-
         // Создаем сцену с макетом и устанавливаем ее для primaryStage
         primaryStage.setScene(new Scene(vBox, 600, 400));
         //vBox.requestFocus();
 
         // Отображаем окно
         primaryStage.show();
+
+        GasStation.stations();
+
+        for (GasStation gasStation : GasStation.indexes) {
+            levelLabels[GasStation.indexes.indexOf(gasStation)].setText(gasStation.getStationName() + ":");
+        }
+
+        calculate.setOnAction(event -> {
+
+            resultOfCalculation.clear();
+
+            for (GasStation gasStation : GasStation.indexes) {
+                gasStation.setCurrentLevel(Double.parseDouble(levelFields[GasStation.indexes.indexOf(gasStation)].getText())*100);
+            }
+
+            double tankVol = Double.parseDouble(tankVolTextField.getText());
+
+            // Вызываем метод perMinute из класса Calculate и передаем нужные значения
+            Calculate.perMinute(resultOfCalculation, tankVol);
+        });
     }
-/*
-    public static Integer getCurLevValue(String name) {
-        return switch(name) {
-            case "Крайня" -> Integer.parseInt(curLevKrainia.getText())*100;
-            case "Шухевича" -> Integer.parseInt(curLevShukhevycha.getText())*100;
-            case "Азербайджанська" -> Integer.parseInt(curLevAzerbaidzhanska.getText())*100;
-        };
-    }
-*/
 }
