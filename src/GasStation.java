@@ -1,47 +1,43 @@
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-public class GasStation {
-    String name;
+public class GasStation implements Serializable {
+    private String name;
     double currentLevel;
 
-    public GasStation(String name, double currentLevel) {
-        this.name = name;
-        this.currentLevel = currentLevel;
-    }
+//    public GasStation(String internalName, double currentLevel) {
+//        this.name = name;
+//        this.currentLevel = currentLevel;
+//    }
 
     public String getStationName() {
         return this.name;
-    }
-
-    public double getCurrentLevel() {
-        return this.currentLevel;
     }
 
     public void setStationName(String name) {
         this.name = name;
     }
 
+    public double getCurrentLevel() {
+        return this.currentLevel;
+    }
+
     public void setCurrentLevel(Double value) {
         this.currentLevel = value;
     }
 
-    public static ArrayList<GasStation> indexes = new ArrayList<>();
-
-    static GasStation Krainia         = new GasStation("Крайня",          0);
-    static GasStation Shukhevycha     = new GasStation("Шухевича",        0);
-    static GasStation Azerbaidzhanska = new GasStation("Азербайджанська", 0);
-
-    public static void stations() {
-        indexes.add(Krainia        );
-        indexes.add(Shukhevycha    );
-        indexes.add(Azerbaidzhanska);
-    }
+    public static ArrayList<GasStation> stations = new ArrayList<>();
+//
+//    static GasStation Krainia         = new GasStation("Крайня",          0);
+//    static GasStation Shukhevycha     = new GasStation("Шухевича",        0);
+//    static GasStation Azerbaidzhanska = new GasStation("Азербайджанська", 0);
+//
+//    public static void stations() {
+//        stations.add(Krainia        );
+//        stations.add(Shukhevycha    );
+//        stations.add(Azerbaidzhanska);
+//    }
 
     public static double litresPerHour(LocalDateTime timeForCalc, String name) {
         if (name.equals("Крайня")) return switch (timeForCalc.getHour()) {
