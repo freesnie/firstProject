@@ -156,13 +156,18 @@ public class CalculateApp extends Application {
             objInFile.clear();
 
             GasStation newStation = new GasStation();
+//            GasStation newStation0 = new GasStation();
             newStation.setStationName(nameField.getText());
+
             WriteToFile.addToFile(newStation);
+//            WriteToFile.addToFile(newStation, newStation0);
+
 
             WriteToFile.readFromFile();
 
             for (GasStation station : GasStation.stations) {
                 objInFile.appendText(station.getStationName() + "\n");
+//                objInFile.appendText(station + "\n");
             }
         });
     }

@@ -2,10 +2,26 @@ import java.io.*;
 
 public class WriteToFile {
 
+    static FileOutputStream fileOut;
+    static ObjectOutputStream out;
+    static FileInputStream fileIn;
+    static ObjectInputStream in;
+
+    static {
+        try {
+            fileOut = new FileOutputStream("Stations.txt", true);
+            out = new ObjectOutputStream(fileOut);
+            fileIn = new FileInputStream("Stations.txt");
+            in = new ObjectInputStream(fileIn);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     //запись обьекта
     public static void addToFile(GasStation newStation) {
 
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("Stations.txt", true))) {
+        try  {
             out.writeObject(newStation);
         } catch (IOException e) {
             e.printStackTrace();
@@ -15,7 +31,7 @@ public class WriteToFile {
     //чтение обьектов
     public static void readFromFile() {
 
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("Stations.txt"))) {
+        try {
             int x = 1;
             while (true) {
                 try {
@@ -27,6 +43,7 @@ public class WriteToFile {
                     System.out.println(x + "й " + "обьект добавлен в ArrayList..." );
                     x++;
                 } catch (EOFException e) {
+                    System.out.println("Достигнут конец файла...");
                     break; // выходим из цикла, если достигнут конец файла
                 }
             }
@@ -35,13 +52,24 @@ public class WriteToFile {
         }
     }
 
-    // очистка файла
-    public static void cleaningFile() {
+//    // закрытие потоков
+//    public static void closeStreams() {
+//
+//        try {
+//            if (out != null) out.close();
+//            if (fileOut != null) fileOut.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("Stations.txt"))) {
-            // ничего не записываем, просто открываем и сразу закрываем поток
-        } catch (IOException e) {
-            e.getMessage();
-        }
-    }
+//    // очистка файла
+//    public static void cleaningFile() {
+//
+//        try (ObjectOutputStream cleaningStream = new ObjectOutputStream(new FileOutputStream("Stations.txt"))) {
+//            // ничего не записываем, просто открываем и сразу закрываем поток
+//        } catch (IOException e) {
+//            e.getMessage();
+//        }
+//    }
 }
